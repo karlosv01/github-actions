@@ -20,4 +20,4 @@ RUN make lint
 RUN make test
 
 # Comando por defecto para cuando arranques el contenedor
-CMD ["python", "script.py"]
+CMD ["python", "app.py"]
