@@ -1,5 +1,6 @@
 ## ejercicio 2
 
+
 name: CI (dummy)
 
 on: ## Event triggers (on:): cuándo se ejecuta (push, PR, manual, schedule, etc.).
@@ -23,7 +24,10 @@ jobs: ## contenedor de todas las tareas. Aquí puedes tener varios (ej: ci, test
       - name: Checkout del repositorio
         uses: actions/checkout@v4 # Copia tu código en el runner. esta línea "descarga" tu código dentro de la máquina para que puedas trabajar con él (leer archivos, compilar, etc.).
       - name: Info
-        run: echo ${{github.ref_name}} ${{github.sha}} ${{runner.os}} ${{runner.name}}
-         
+        run: |
+          echo "refname: ${{ github.ref_name }}"
+          echo "sha: ${{ github.sha }}"
+          echo "os: ${{ runner.os }}"
+          echo "name: ${{ runner.name }}"         
 
       
