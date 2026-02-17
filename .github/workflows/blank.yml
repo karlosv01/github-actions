@@ -35,6 +35,7 @@ jobs: ## contenedor de todas las tareas. Aquí puedes tener varios (ej: ci, test
           echo "os: ${{ runner.os }}"
           echo "name: ${{ runner.name }}"      
       - name: "Mostrar valores"
-        run: echo "$IMAGE_NAME $APP_URL"
-
+        run: |
+          echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
+          echo "APP_URL: ${{ env.APP_URL }}"
       
