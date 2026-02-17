@@ -1,7 +1,4 @@
-# Práctica 3 - GitHub Actions (dummy)
-#
-# Punto de partida: workflow mínimo para validar que Actions funciona en el repo.
-# En la Práctica 3 irás ampliando este workflow para llegar a CI/CD.
+## ejercicio 1
 
 name: CI (dummy)
 
