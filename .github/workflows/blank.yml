@@ -92,13 +92,13 @@ jobs: ## contenedor de todas las tareas. Aquí puedes tener varios (ej: ci, test
       - name: "Inspeccionar recursos creados"
         run: |
           echo "--- CONTENEDORES ACTIVOS ---"
-          docker ps -a --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+          docker ps -a 
 
           echo -e "\n--- REDES DE DOCKER ---"
-          docker network ls --filter name=scalian_training
+          docker network ls
 
           echo -e "\n--- VOLÚMENES ---"
-          docker volume ls --filter name=dbdata        
+          docker volume ls      
       - name: "Cleanup"
         if: always() ## siempre se ejecuta
         run: |
