@@ -1,5 +1,5 @@
 ## ejercicio final 1
-## Paso 1 - Crear un runner self-hosted en el repo
+## Paso 4 - Usar el runner en el workflow
 
 name: CI (dummy)
 env:
@@ -30,7 +30,8 @@ jobs: ## contenedor de todas las tareas. Aquí puedes tener varios (ej: ci, test
   ci: ## Es el identificador de este job.
     name: Integración Continua
     #runs-on: ubuntu-latest # Define el sistema operativo (Linux) 
-    runs-on: self-hosted
+    #runs-on: self-hosted # para ejecutarlo con la herramienta de git en local
+    runs-on: [self-hosted, linux, docker]
     env:
       IMAGE_NAME: c
       APP_URL: d
@@ -65,7 +66,8 @@ jobs: ## contenedor de todas las tareas. Aquí puedes tener varios (ej: ci, test
     needs: ci # Asegura que el CI pase primero
     if: github.ref_name == 'develop' || github.ref_name == 'master' || github.ref_name == 'main' || inputs.RUN_CD == true
     #runs-on: ubuntu-latest    
-    runs-on: self-hosted
+    #runs-on: self-hosted
+    runs-on: [self-hosted, linux, docker]
     steps: 
       - name: "Validación de Condición de Despliegue"
         run: |
