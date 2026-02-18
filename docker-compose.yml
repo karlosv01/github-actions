@@ -1,44 +1,43 @@
-services:
-  app:
-    image: mi-aplicacion-ci:0.0.1
-    #build: 
-     # context: .
-      #dockerfile: devops/ci.Dockerfile
-    container_name: my-flask-app-dc
-    restart: unless-stopped
-    networks:
-      - scalian_training
-    environment:
-      DB_USER: root
-      DB_PWD: rootpwd
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_NAME: knights
-    depends_on:
-      - db
-    ports:
-      - "5001:5000"
+services:                       # Define los contenedores (servicios) que componen la aplicación
+  app:                          # Nombre del servicio para nuestra aplicación Flask
+    image: mi-aplicacion-ci:0.0.1 # Imagen que debe usar (debe coincidir con la que creas en el CI)
+    # build:                    # (Comentado) Si no existiera la imagen, Docker intentaría construirla
+    #   context: .              # (Comentado) Ubicación de los archivos para construir la imagen
+    #   dockerfile: devops/ci.Dockerfile # (Comentado) Ruta específica del Dockerfile de CI
+    container_name: my-flask-app-dc # Nombre fijo que tendrá el contenedor al ejecutarse
+    restart: unless-stopped     # Reinicia el contenedor si falla, a menos que lo detengas manualmente
+    networks:                   # Conecta este servicio a redes específicas
+      - scalian_training        # Nombre de la red compartida para hablar con la base de datos
+    environment:                # Variables de entorno que Flask leerá para su configuración
+      DB_USER: root             # Usuario para conectar a la base de datos
+      DB_PWD: rootpwd           # Contraseña para conectar a la base de datos
+      DB_HOST: db               # Nombre del servicio de base de datos (Docker resuelve la IP)
+      DB_PORT: 5432             # Puerto estándar de PostgreSQL
+      DB_NAME: knights          # Nombre de la base de datos a la que conectarse
+    depends_on:                 # Control de orden de arranque
+      - db                      # Indica que la base de datos debe intentar arrancar antes que la app
+    ports:                      # Mapeo de puertos entre el host y el contenedor
+      - "5001:5000"             # Accederemos por el 5001 (host) hacia el 5000 (contenedor)
 
-  
-  db:
-    image: postgres:16-alpine
-    container_name: my-flask-app-db
-    restart: always
-    ports:
-      - "32000:5432"
-    environment:
-      POSTGRES_PASSWORD: rootpwd
-      POSTGRES_USER: root
-      POSTGRES_DB: knights
-    volumes:
-      - ./db:/docker-entrypoint-initdb.d
-      - dbdata:/var/lib/postgresql/data
-    networks:
-      scalian_training:
+  db:                           # Nombre del servicio para la base de datos
+    image: postgres:16-alpine   # Imagen oficial de PostgreSQL (versión ligera basada en Alpine)
+    container_name: my-flask-app-db # Nombre fijo para el contenedor de la base de datos
+    restart: always             # Reinicia siempre este contenedor si se cae
+    ports:                      # Mapeo de puertos para la base de datos
+      - "32000:5432"            # Permite conectar desde fuera al puerto 32000
+    environment:                # Configuración inicial de PostgreSQL
+      POSTGRES_PASSWORD: rootpwd # Define la contraseña del superusuario
+      POSTGRES_USER: root       # Define el nombre del superusuario
+      POSTGRES_DB: knights      # Crea automáticamente una base de datos llamada 'knights'
+    volumes:                    # Persistencia de datos y scripts iniciales
+      - ./db:/docker-entrypoint-initdb.d # Ejecuta scripts .sql que pongas en tu carpeta local ./db
+      - dbdata:/var/lib/postgresql/data # Guarda los datos en un volumen gestionado por Docker
+    networks:                   # Conecta la base de datos a la red
+      scalian_training:         # Debe ser la misma red que usa el servicio 'app'
 
-networks:
-  scalian_training:
-    driver: bridge
-  
-volumes:
-  dbdata:
+networks:                       # Definición de las redes de Docker
+  scalian_training:             # Nombre de nuestra red personalizada
+    driver: bridge              # Tipo de red estándar para que los contenedores en un host se hablen
+
+volumes:                        # Definición de volúmenes persistentes
+  dbdata:                       # Volumen 'dbdata' para que los datos no se borren al apagar la DB
