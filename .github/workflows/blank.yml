@@ -61,7 +61,7 @@ jobs: ## contenedor de todas las tareas. Aquí puedes tener varios (ej: ci, test
             -f devops/ci.Dockerfile .
   cd:
     name: Despliegue Continuo
-    if: github.ref_name == 'develop' || github.ref_name == 'master' || inputs.RUN_CD == true
+    if: github.ref_name == 'develop' || github.ref_name == 'master' || github.ref_name == 'main' || inputs.RUN_CD == true
     runs-on: ubuntu-latest    
     steps: 
       - name: "Validación de Condición de Despliegue"
