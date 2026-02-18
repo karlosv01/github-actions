@@ -71,6 +71,8 @@ jobs: ## contenedor de todas las tareas. Aquí puedes tener varios (ej: ci, test
           echo "inputs.RUN_CD: ${{ inputs.RUN_CD }}"    
       - name: "Checkout del repositorio"
         uses: actions/checkout@v4    
+      - name: "Volver a construir la imagen en este job." ## Otra opcion es subirla al Registry
+        run:  docker build -t mi-aplicacion-ci:0.0.1 -f devops/ci.Dockerfile . ## # Necesitamos construirla AQUÍ para que el Compose la encuentre
       - name: "Verificar Directorio y Archivos"
         run: |
           echo "📍 Directorio actual: $(pwd)"
